@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import sys
-from random import seed, randint  #, random as rand
+from random import setstate, random as rand
 
 ABOUT = """
 Ensemencer esointerpreter
@@ -9,10 +9,24 @@ Ensemencer esointerpreter
 """
 
 
+def seed(s):
+    setstate(seedstate(s))
+
+
+def seedstate(s):
+    """
+    Returns a Python Random internal v3 state as would be initialised by the init_genrand() method.
+    i.e. a 32bit integer seed, NOT a byte array for the init_by_array() method.
+    """
+    mt = [s]
+    for i in range(1, 624):
+       mt.append((0x6c078965 * (mt[i - 1] ^ (mt[i - 1] >> 30)) + i) & (2**32 - 1))
+    return (3, tuple(mt + [624]), None)
+
+
 def read():
     """Read (psuedo-random) data.."""
-    i = randint(0, 255)
-    #i = int(rand() * 256)
+    i = int(rand() * 256)
     if debug:
         print('READ:', i)
     return i
@@ -41,7 +55,7 @@ if __name__ == '__main__':
         print('INPUT BUFFER', inbuffer)
 
     current_seed = 0
-    seed(0, version=2)  # initialise twister to 0
+    seed(0)  # initialise twister to 0
     digits = ''
     with open(args.file, 'r') as f:
         c = f.read(1)
