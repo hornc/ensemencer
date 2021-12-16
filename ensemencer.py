@@ -8,6 +8,8 @@ Ensemencer esointerpreter
 
 """
 
+debug = False
+
 
 def seed(s):
     setstate(seedstate(s))
