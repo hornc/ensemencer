@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import sys
-from random import setstate, random as rand
+from random import setstate, getrandbits
 
 ABOUT = """
 Ensemencer esointerpreter
@@ -26,9 +26,14 @@ def seedstate(s):
     return (3, tuple(mt + [624]), None)
 
 
+def read32():
+    return getrandbits(32)
+
+
 def read():
-    """Read (psuedo-random) data.."""
-    i = int(rand() * 256)
+    """Read one byte of (psuedo-random) data.."""
+    i = read32() >> 24
+    # should be equivalent to i = getrandbits(8)
     if debug:
         print('READ:', i)
     return i
@@ -87,10 +92,10 @@ if __name__ == '__main__':
                     print('INPUT:', current_seed)
                 seed(current_seed)
             elif c == '<':  # insert random int to inbuffer
-                inbuffer.insert(0, read()) 
+                inbuffer.insert(0, read())
             elif c == '>':  # append random int to inbuffer
                 inbuffer.append(read())
             elif c == '?':
-                if read() & 1:
+                if read32() & 1:
                     f.read(1)  # skip next instruction byte
             c = f.read(1)
