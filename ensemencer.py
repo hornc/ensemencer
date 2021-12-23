@@ -1,18 +1,39 @@
 #!/usr/bin/env python3
 import argparse
 import sys
-from random import seed, randint  #, random as rand
+from random import setstate, getrandbits
 
 ABOUT = """
 Ensemencer esointerpreter
 
 """
 
+debug = False
+
+
+def seed(s):
+    setstate(seedstate(s))
+
+
+def seedstate(s):
+    """
+    Returns a Python Random internal v3 state as would be initialised by the init_genrand() method.
+    i.e. a 32bit integer seed, NOT a byte array for the init_by_array() method.
+    """
+    mt = [s]
+    for i in range(1, 624):
+       mt.append((0x6c078965 * (mt[i - 1] ^ (mt[i - 1] >> 30)) + i) & (2**32 - 1))
+    return (3, tuple(mt + [624]), None)
+
+
+def read32():
+    return getrandbits(32)
+
 
 def read():
-    """Read (psuedo-random) data.."""
-    i = randint(0, 255)
-    #i = int(rand() * 256)
+    """Read one byte of (psuedo-random) data.."""
+    i = read32() >> 24
+    # should be equivalent to i = getrandbits(8)
     if debug:
         print('READ:', i)
     return i
@@ -41,7 +62,7 @@ if __name__ == '__main__':
         print('INPUT BUFFER', inbuffer)
 
     current_seed = 0
-    seed(0, version=2)  # initialise twister to 0
+    seed(0)  # initialise twister to 0
     digits = ''
     with open(args.file, 'r') as f:
         c = f.read(1)
@@ -71,10 +92,10 @@ if __name__ == '__main__':
                     print('INPUT:', current_seed)
                 seed(current_seed)
             elif c == '<':  # insert random int to inbuffer
-                inbuffer.insert(0, read()) 
+                inbuffer.insert(0, read())
             elif c == '>':  # append random int to inbuffer
                 inbuffer.append(read())
             elif c == '?':
-                if read() & 1:
+                if read32() & 1:
                     f.read(1)  # skip next instruction byte
             c = f.read(1)
