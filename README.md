@@ -20,7 +20,7 @@ The seed is generated using the MT19937 <code>init_genrand()</code> algorithm, w
 * `#` read value from input buffer and set seed
 * `.` output next data byte (MT32bit >> 24)
 * `<int [0-9]+>` read `<int>` data values and discard them
-* `?` conditional, only execute next instruction if MT32bit & 1 is true
+* `?` conditional skip, skip the next instruction byte if MT32bit & 1 is true
 * `-` next - skip remaining commands and begin program loop again
 * `<` read data byte and insert at head of input stream
 * `!` halt
