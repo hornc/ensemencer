@@ -21,7 +21,7 @@ The seed is generated using the MT19937 <code>init_genrand()</code> algorithm, w
 * `.` output next data byte (MT32bit >> 24)
 * `<int [0-9]+>` read `<int>` data values and discard them
 * `?` conditional, only execute next instruction if MT32bit & 1 is true
-* `-` next - skip remaining commands and begin progam loop again
+* `-` next - skip remaining commands and begin program loop again
 * `<` read data byte and insert at head of input stream
 * `!` halt
 * `{EOF}` read the remainder of the data field (to 2<sup>19937</sup>-1) and reset instruction stream
