@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
             if not c or c == '-':
                 if debug:
-                    print('\n<EOF>')
+                    print('SKIP TO' if c == '-' else '', '<EOF>')
                 f.seek(0)
                 seed(current_seed)
             elif c in '0123456789':
@@ -105,10 +105,13 @@ if __name__ == '__main__':
                 inbuffer.insert(0, read())
             elif c == '>':  # append random int to inbuffer
                 inbuffer.append(read())
+            elif c == ';':  # debugging skip check test
+                t = read32() & 1
+                print(('F', 'T')[t], end='', flush=True)
             elif c == '?':
                 t = read32() & 1
                 if debug:
-                    print('TEST:', bool(t))
+                    print('SKIP TEST:', bool(t))
                 if t:
                     f.read(1)  # skip next instruction byte
             c = f.read(1)
