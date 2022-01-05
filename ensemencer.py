@@ -4,7 +4,9 @@ import sys
 from random import setstate, getrandbits
 
 ABOUT = """
-Ensemencer esointerpreter
+Ensemencer esointerpreter.
+Discover finite-state-automata by overlaying regions of the Mersenne twister!
+https://esolangs.org/wiki/Ensemencer
 
 """
 
@@ -33,9 +35,7 @@ def read32():
 def read():
     """Read one byte of (psuedo-random) data.."""
     i = read32() >> 24
-    # should be equivalent to i = getrandbits(8)
-    if debug:
-        print('READ:', i)
+    # the above should be equivalent to i = getrandbits(8)
     return i
 
 
@@ -71,13 +71,18 @@ if __name__ == '__main__':
         c = f.read(1)
         while True:
             if digits and c not in '0123456789':
+                reads = []
                 for i in range(int(digits)):
-                    read()
+                    r = read()
+                    if debug:
+                        reads.append(r)
+                if debug:
+                    print('READ:', ', '.join([str(r) for r in reads]))
                 digits = ''
 
             if not c or c == '-':
                 if debug:
-                    print('END OF FILE!')
+                    print('\n<EOF>')
                 f.seek(0)
                 seed(current_seed)
             elif c in '0123456789':
@@ -92,7 +97,7 @@ if __name__ == '__main__':
             elif c == '#':
                 current_seed = readinput(inbuffer)
                 if debug:
-                    print('INPUT:', current_seed)
+                    print('INPUT SEED:', current_seed)
                 if current_seed is None:
                     break
                 seed(current_seed)
@@ -101,6 +106,9 @@ if __name__ == '__main__':
             elif c == '>':  # append random int to inbuffer
                 inbuffer.append(read())
             elif c == '?':
-                if read32() & 1:
+                t = read32() & 1
+                if debug:
+                    print('TEST:', bool(t))
+                if t:
                     f.read(1)  # skip next instruction byte
             c = f.read(1)
