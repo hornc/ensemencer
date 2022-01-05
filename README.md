@@ -1,5 +1,7 @@
 # Ensemencer
-An esoteric programming language.
+An [esoteric programming language](https://esolangs.org/wiki/ensemencer).
+
+Discover finite-state-automata by overlaying regions of the Mersenne twister!
 
 Uses the standard Mersenne twister implementation MT19937 to seed its main memory space. Named after the French verb meaning 'to sow' (seeds).
 
