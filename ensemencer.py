@@ -42,7 +42,10 @@ def read():
 def readinput(inbuffer):
     if inbuffer:
         return inbuffer.pop(0)
-    return ord(sys.stdin.read(1))
+    i = sys.stdin.read(1)
+    if i == '':
+        return
+    return ord(i)
 
 
 if __name__ == '__main__':
@@ -90,6 +93,8 @@ if __name__ == '__main__':
                 current_seed = readinput(inbuffer)
                 if debug:
                     print('INPUT:', current_seed)
+                if current_seed is None:
+                    break
                 seed(current_seed)
             elif c == '<':  # insert random int to inbuffer
                 inbuffer.insert(0, read())
