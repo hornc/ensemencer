@@ -18,17 +18,20 @@ The Mersenne twister has a period of 2<sup>19937</sup>-1, when the instruction p
 The seed is generated using the MT19937 <code>init_genrand()</code> algorithm, which is limited to 32bit seeds. This is not the default in Python3 which uses the <code>init_by_array()</code> and can accept larger seeds. (I need to check the actual size limit for these seeds, I suspect up to 64bit system dependent seeds can be used, but these are scaled down to 32bit?)
 
 
-## Instructions:
-* `#` read value from input buffer and set seed
-* `.` output next data byte (MT32bit >> 24)
-* `<int [0-9]+>` read `<int>` data values and discard them
-* `?` conditional skip, skip the next instruction byte if MT32bit & 1 is true
-* `-` next - skip remaining commands and begin program loop again
-* `<` read data byte and insert at head of input stream
-* `!` halt
-* `{EOF}` read the remainder of the data field (to 2<sup>19937</sup>-1) and reset instruction stream
+## Commands:
 
-### Possible extension instructions:
+| Command | Description |
+| ------- | ----------- |
+| `#`     | Read value from input buffer and set seed |
+| `.`     | Output next data byte (MT32bit >> 24) |
+| `<int [0-9]+>` | Read `<int>` data values and discard them |
+| `?`     | Conditional skip, skip the next instruction byte if MT32bit & 1 is true |
+| `-`     | Next - skip remaining commands and begin program loop again |
+| `<`     | Read data byte and insert at head of input stream |
+| `!`     | Halt |
+| `{EOF}` | Read the remainder of the data field (to 2<sup>19937</sup>-1) and reset instruction stream |
+
+### Possible extensions:
 * `>` read data byte and append to input stream
 * `x` discard value from input buffer
 * `@` read byte then read that many bytes and discard
