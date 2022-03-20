@@ -23,9 +23,9 @@ The seed is generated using the MT19937 <code>init_genrand()</code> algorithm, w
 | Command | Description |
 | ------- | ----------- |
 | `#`     | Read value from input buffer and set seed |
-| `.`     | Output next data byte (MT32bit >> 24) |
-| `<int [0-9]+>` | Read `<int>` data values and discard them |
-| `?`     | Conditional skip, skip the next instruction byte if MT32bit & 1 is true |
+| `.`     | Output next data byte (`MT32bit >> 24`) |
+| `{int [0-9]+}` | Read `{int}` data values and discard them |
+| `?`     | Conditional skip, skip the next instruction byte if `MT32bit & 1` is true |
 | `-`     | Next - skip remaining commands and begin program loop again |
 | `<`     | Read data byte and insert at head of input stream |
 | `!`     | Halt |
